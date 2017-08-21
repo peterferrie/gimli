@@ -1,0 +1,52 @@
+gx.asm(38) : Error A2209: Syntax error: bits
+gx.asm(40) : Error A2209: Syntax error: define
+gx.asm(41) : Error A2209: Syntax error: define
+gx.asm(42) : Error A2209: Syntax error: define
+gx.asm(44) : Error A2209: Syntax error: define
+gx.asm(45) : Error A2209: Syntax error: define
+gx.asm(46) : Error A2209: Syntax error: define
+gx.asm(48) : Error A2209: Syntax error: define
+gx.asm(49) : Error A2209: Syntax error: define
+gx.asm(51) : Error A2209: Syntax error: define
+gx.asm(52) : Error A2209: Syntax error: define
+gx.asm(53) : Error A2209: Syntax error: define
+gx.asm(54) : Error A2209: Syntax error: define
+gx.asm(56) : Error A2082: Must be in segment block
+gx.asm(57) : Error A2082: Must be in segment block
+gx.asm(58) : Error A2209: Syntax error: int3
+gx.asm(59) : Error A2082: Must be in segment block
+gx.asm(60) : Error A2082: Must be in segment block
+gx.asm(61) : Error A2082: Must be in segment block
+gx.asm(62) : Error A2082: Must be in segment block
+gx.asm(63) : Error A2082: Must be in segment block
+gx.asm(65) : Error A2082: Must be in segment block
+gx.asm(66) : Error A2082: Must be in segment block
+gx.asm(67) : Error A2082: Must be in segment block
+gx.asm(68) : Error A2082: Must be in segment block
+gx.asm(69) : Error A2082: Must be in segment block
+gx.asm(70) : Error A2082: Must be in segment block
+gx.asm(71) : Error A2082: Must be in segment block
+gx.asm(72) : Error A2082: Must be in segment block
+gx.asm(73) : Error A2082: Must be in segment block
+gx.asm(75) : Error A2082: Must be in segment block
+gx.asm(76) : Error A2082: Must be in segment block
+gx.asm(79) : Error A2082: Must be in segment block
+gx.asm(80) : Error A2082: Must be in segment block
+gx.asm(83) : Error A2082: Must be in segment block
+gx.asm(86) : Error A2082: Must be in segment block
+gx.asm(87) : Error A2082: Must be in segment block
+gx.asm(88) : Error A2082: Must be in segment block
+gx.asm(89) : Error A2082: Must be in segment block
+gx.asm(90) : Error A2082: Must be in segment block
+gx.asm(91) : Error A2082: Must be in segment block
+gx.asm(92) : Error A2082: Must be in segment block
+gx.asm(93) : Error A2082: Must be in segment block
+gx.asm(94) : Error A2082: Must be in segment block
+gx.asm(97) : Error A2082: Must be in segment block
+gx.asm(98) : Error A2082: Must be in segment block
+gx.asm(99) : Error A2082: Must be in segment block
+gx.asm(100) : Error A2082: Must be in segment block
+gx.asm(101) : Error A2082: Must be in segment block
+gx.asm(102) : Error A2082: Must be in segment block
+gx.asm(103) : Error A2082: Must be in segment block
+gx.asm(103) : Fatal error A1113: Too many errors
