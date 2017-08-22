@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 extern void gimli(unsigned int *);
+extern void gimlix(unsigned int *);
 
 int main()
 {

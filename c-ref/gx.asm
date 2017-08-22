@@ -30,50 +30,56 @@
 ; -----------------------------------------------
 ; Gimli permutation function
 ;
-; size: 131 bytes
+; size: 128 bytes
 ;
 ; global calls use cdecl convention
 ;
 ; -----------------------------------------------
-bits 32
+
+    bits 32
+
+    %ifndef BIN
+      global gimlix
+      global _gimlix
+    %endif
+
+%define j eax
 
 %define x ebx
-%define y edi
-%define z ebp
+%define y ecx
+%define z edx
 
-%define j edx
-%define r ecx
 %define s esi
 
-%define t0 ecx 
-%define t1 edx
+%define t0 ebp 
+%define t1 edi
 
-%define s0 eax
+%define r  ecx
+
+%define s0 edx
 %define s1 ebx
-%define s2 edx
-%define s3 ebp
+%define s2 ebp
+%define s3 esi
 
-gimli:
-_gimli:
-    pushad
-    mov    esi, [esp+32+4] ; esi = s    
-    push   24
-    pop    ecx
+gimlix:
+_gimlix:
+    pushad  
+    mov    r, 0x9e377900 + 24
 g_l0:
-    push   esi
-    push   ecx
-    xor    eax, eax
+    mov    s, [esp+32+4]        ; esi = s 
+    push   r
+    xor    j, j
 g_l1:
     ; x = ROTR32(s[    j], 8);
-    mov    x, [s + j * 4]  
+    mov    x, [s + j*4]  
     ror    x, 8  
     
     ; y = ROTL32(s[4 + j], 9);
-    mov    y, [s + j * 4 + (4*4)]   
+    mov    y, [s + j*4 + (4*4)]   
     rol    y, 9
     
     ; z =        s[8 + j];
-    mov    z, [s + j * 4 + (4*8)]
+    mov    z, [s + j*4 + (4*8)]
     
     ; s[8 + j] = x ^ (z << 1) ^ ((y & z) << 2);
     mov    t0, y
@@ -94,33 +100,31 @@ g_l1:
     xor    t1, t0
     mov    [s + j*4 + (4*4)], t1
     
-    ; s[j]     = z ^ y        ^ ((x & y) << 3);
-    
+    ; s[j]     = z ^ y        ^ ((x & y) << 3);    
     xor    z, y
     and    x, y
     shl    x, 3
     xor    z, x
     mov    [s + j*4], z
     
-    inc    eax
+    inc    j
     cmp    al, 4
     jnz    g_l1
     
-    pop    ecx
+    pop    r
+    mov    edi, esi
     
     lodsd
-    xchg   eax, s3
+    xchg   eax, s0
     lodsd
     xchg   eax, s1
     lodsd
     xchg   eax, s2
     lodsd
     xchg   eax, s3
-    pop    esi
-    mov    edi, esi
     
-    mov    dl, cl
-    and    dl, 3
+    mov    al, cl
+    and    al, 3
     jnz    g_l2
     
     ; XCHG (s[0], s[1]);
@@ -128,16 +132,16 @@ g_l1:
     ; XCHG (s[2], s[3]);
     xchg   s2, s3
     ; s[0] ^= 0x9e377900 ^ r;
-    xor    s0, 0x9e377900
-    xor    s0, ecx    
+    xor    s0, r    
 g_l2:
-    cmp    dl, 2
+    cmp    al, 2
     jnz    g_l3  
     ; XCHG (s[0], s[2]);
     xchg   s0, s2
     ; XCHG (s[1], s[3]);
     xchg   s1, s3
-g_l3:    
+g_l3:
+    xchg   eax, s0   
     stosd
     xchg   eax, s1
     stosd
@@ -145,7 +149,8 @@ g_l3:
     stosd
     xchg   eax, s3
     stosd    
-    loop   g_l0    
+    dec    cl   
+    jnz    g_l0    
     popad
     ret
     

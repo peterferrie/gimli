@@ -25,7 +25,7 @@ void Gimli_hash(const uint8_t *input,
         inputByteLen -= blockSize;
 
         if (blockSize == rateInBytes) {
-            gimli(state);
+            gimlix(state);
             blockSize = 0;
         }
     }
@@ -45,6 +45,6 @@ void Gimli_hash(const uint8_t *input,
         outputByteLen -= blockSize;
 
         if (outputByteLen > 0)
-            gimli(state);
+            gimlix(state);
     }
 }

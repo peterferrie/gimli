@@ -7,3 +7,4 @@
 #include <stdint.h>
 
 void gimli(uint32_t *state);
+void gimlix(uint32_t *state);
