@@ -27,7 +27,7 @@ extern void gimli(uint32_t *s)
       
       // add constant      
       s[0] ^= r;
-    } else  
+    }   
     // big swap
     if (t == 2) {
       XCHG(s[0], s[2]);
