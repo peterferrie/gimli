@@ -43,13 +43,12 @@
       global _gimlix
     %endif
 
-%define j eax
+%define j  eax
+%define x  ebx
+%define y  ecx
+%define z  edx
 
-%define x ebx
-%define y ecx
-%define z edx
-
-%define s esi
+%define s  esi
 
 %define t0 ebp 
 %define t1 edi
