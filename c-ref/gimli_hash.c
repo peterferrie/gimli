@@ -35,7 +35,7 @@ void Gimli_hash(const uint8_t *input,
     // Add the second bit of padding
     state_8[rateInBytes-1] ^= 0x80;
     // Switch to the squeezing phase
-    gimli(state);
+    gimlix(state);
 
     // === Squeeze out all the output blocks ===
     while(outputByteLen > 0) {

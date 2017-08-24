@@ -2,12 +2,14 @@
 
 #include "macros.h"
 
-extern void gimli(uint32_t *s)
+void gimli(void *state)
 {
   int      r, j;
   uint32_t t, x, y, z;
+  uint32_t *s=(uint32_t*)state;
   
   for (r=0x9e377918; r!=0x9e377900; r--) {
+    // apply SP-box
     for (j=0; j<4; j++) {
       x = ROTR32(s[    j], 8);
       y = ROTL32(s[4 + j], 9);
@@ -18,6 +20,7 @@ extern void gimli(uint32_t *s)
       s[j]     = z ^ y        ^ ((x & y) << 3);
     }
 
+    // apply Linear layer
     t = r & 3;
     
     // small swap
