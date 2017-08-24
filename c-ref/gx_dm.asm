@@ -34,7 +34,7 @@
 ;
 ; x86 uses cdecl convention
 ; x64 (windows) uses Microsoft Fast Calling Convention
-; x64 (nix/bsd) uses 64-bit fast call
+; x64 (nix/bsd) uses 64-bit fast call (use -DNIX)
 ;
 ; -----------------------------------------------
 
@@ -69,8 +69,13 @@ _gimlix:
     push   ebp
     push   ebx
     
-    ; 64-bit
-    push   ecx                  ; rcx = state
+    ; 64-bit Linux/BSD
+    %ifdef NIX
+    push   edi                  ; rdi = state
+    %else
+    ; 64-bit Windows
+    push   ecx
+    %endif
     pop    s                    ; rsi = state
     
     xor    eax, eax

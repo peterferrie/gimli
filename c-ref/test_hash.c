@@ -63,7 +63,7 @@ void print_tex(char* string, uint8_t* output) {
 	}
 	else
 	{
-		fprintf( stderr, "\t{\\bf input:} \"\" (empty string)\\\\\n",string);
+		fprintf( stderr, "\t{\\bf input:} \"\" (empty string)\\\\\n");
 		fprintf( stderr, "\t{\\bf input (bytes):} {\\it(0 bytes)}\\\\\n");
 	}
 	fprintf( stderr, "\t{\\bf output:}\\\\\n");
