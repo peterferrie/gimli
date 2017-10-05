@@ -28,11 +28,13 @@
 ;  POSSIBILITY OF SUCH DAMAGE.
 ;
 ; -----------------------------------------------
-; Gimli permutation function
+; Gimli permutation function (x86 dual mode)
 ;
-; size: 128 bytes
+; size: 144 bytes
 ;
-; global calls use cdecl convention
+; x86 uses cdecl convention
+; x64 (windows) uses Microsoft Fast Calling Convention
+; x64 (nix/bsd) uses 64-bit fast call (use -DNIX)
 ;
 ; -----------------------------------------------
 
@@ -62,10 +64,29 @@
 
 gimlix:
 _gimlix:
-    pushad  
-    mov    r, 0x9e377900 + 24
-g_l0:
+    push   esi
+    push   edi
+    push   ebp
+    push   ebx
+    
+    ; 64-bit Linux/BSD
+    %ifdef NIX
+    push   edi                  ; rdi = state
+    %else
+    ; 64-bit Windows
+    push   ecx
+    %endif
+    pop    s                    ; rsi = state
+    
+    xor    eax, eax
+    dec    eax
+    jz     x64
+    
+    ; 32-bit
     mov    s, [esp+32+4]        ; esi = s 
+x64:    
+    mov    r, 0x9e377900 + 24
+g_l0:    
     push   r
     xor    j, j
 g_l1:
@@ -106,7 +127,7 @@ g_l1:
     xor    z, x
     mov    [s + j*4], z
     
-    inc    j
+    inc    al
     cmp    al, 4
     jnz    g_l1
     
@@ -141,6 +162,7 @@ g_l2:
     ; XCHG (s[1], s[3]);
     xchg   s1, s3
 g_l3:
+    push   edi
     xchg   eax, s0   
     stosd
     xchg   eax, s1
@@ -148,10 +170,14 @@ g_l3:
     xchg   eax, s2
     stosd
     xchg   eax, s3
-    stosd    
+    stosd
+    pop    s    
     dec    cl   
     jnz    g_l0    
-    popad
+    pop    ebx
+    pop    ebp
+    pop    edi
+    pop    esi
     ret
     
     
