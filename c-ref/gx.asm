@@ -112,7 +112,8 @@ g_l1:
     jnz    g_l1
     
     pop    r
-    mov    edi, esi
+    push   s
+    pop    edi
     
     lodsd
     xchg   eax, s0
