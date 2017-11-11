@@ -1,5 +1,5 @@
 ;
-;  Copyright © 2017 Odzhan. All Rights Reserved.
+;  Copyright © 2017 Odzhan, Peter Ferrie. All Rights Reserved.
 ;
 ;  Redistribution and use in source and binary forms, with or without
 ;  modification, are permitted provided that the following conditions are
@@ -30,7 +30,7 @@
 ; -----------------------------------------------
 ; Gimli permutation function
 ;
-; size: 128 bytes
+; size: 112 bytes
 ;
 ; global calls use cdecl convention
 ;
@@ -43,9 +43,9 @@
       global _gimlix
     %endif
 
-%define j  eax
-%define x  ebx
-%define y  ecx
+%define j  ebx
+%define x  eax
+%define y  ebp
 %define z  edx
 
 %define s  esi
@@ -55,7 +55,7 @@
 
 %define r  ecx
 
-%define s0 edx
+%define s0 eax
 %define s1 ebx
 %define s2 ebp
 %define s3 esi
@@ -66,65 +66,63 @@ _gimlix:
     mov    r, 0x9e377900 + 24
 g_l0:
     mov    s, [esp+32+4]        ; esi = s 
-    push   r
-    xor    j, j
+    push   s
+    push   4
+    pop    j
 g_l1:
     ; x = ROTR32(s[    j], 8);
-    mov    x, [s + j*4]  
+    lodsd  ;mov    x, [s]  
     ror    x, 8  
     
     ; y = ROTL32(s[4 + j], 9);
-    mov    y, [s + j*4 + (4*4)]   
+    mov    y, [s + (4*3)]   
     rol    y, 9
     
     ; z =        s[8 + j];
-    mov    z, [s + j*4 + (4*8)]
+    mov    z, [s + (4*7)]
     
     ; s[8 + j] = x ^ (z << 1) ^ ((y & z) << 2);
-    mov    t0, y
+    push   x
+    push   y
     lea    t1, [z + z]
-    and    t0, z
-    shl    t0, 2
-    xor    t1, t0
-    mov    t0, x
-    xor    t0, t1    
-    mov    [s + j*4 + (8*4)], t0
+    and    y, z
+    shl    y, 2
+    xor    t1, y
+    xor    x, t1    
+    mov    [s + (7*4)], x
+    pop    y
+    pop    x
     
     ; s[4 + j] = y ^ x        ^ ((x | z) << 1);
-    mov    t0, x
-    mov    t1, y
-    or     t0, z
-    shl    t0, 1
-    xor    t1, x
-    xor    t1, t0
-    mov    [s + j*4 + (4*4)], t1
+    push   x
+    push   y
+    xor    y, x
+    or     x, z
+    shl    x, 1
+    xor    y, x
+    mov    [s + (3*4)], y
+    pop    y
+    pop    x
     
     ; s[j]     = z ^ y        ^ ((x & y) << 3);    
     xor    z, y
     and    x, y
     shl    x, 3
     xor    z, x
-    mov    [s + j*4], z
+    push   z
     
-    inc    j
-    cmp    al, 4
+    dec    j
     jnz    g_l1
-    
-    pop    r
-    push   s
-    pop    edi
-    
-    lodsd
-    xchg   eax, s0
-    lodsd
-    xchg   eax, s1
-    lodsd
-    xchg   eax, s2
-    lodsd
-    xchg   eax, s3
-    
-    mov    al, cl
-    and    al, 3
+
+    pop    s3
+    pop    s2
+    pop    s1
+    pop    s0
+
+    pop    t1
+
+    mov    dl, cl
+    and    dl, 3
     jnz    g_l2
     
     ; XCHG (s[0], s[1]);
@@ -134,14 +132,13 @@ g_l1:
     ; s[0] ^= 0x9e377900 ^ r;
     xor    s0, r    
 g_l2:
-    cmp    al, 2
+    cmp    dl, 2
     jnz    g_l3  
     ; XCHG (s[0], s[2]);
     xchg   s0, s2
     ; XCHG (s[1], s[3]);
     xchg   s1, s3
 g_l3:
-    xchg   eax, s0   
     stosd
     xchg   eax, s1
     stosd
